@@ -6,7 +6,7 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:56:42 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 12:40:04 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/06 16:47:32 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include <string>
 # include <exception>
 # include "colors.h"
+# include "Form.hpp"
+
+class Form;
 
 class Bureaucrat
 {
@@ -38,7 +41,7 @@ public:
 	void downGrade(int n);
 	void downGrade();
 	
-	void signForm();
+	void signForm(Form& form) const;
 	
 	class GradeTooHighException : public std::exception 
 	{

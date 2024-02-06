@@ -6,11 +6,12 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:54:13 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 12:23:20 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/06 17:13:42 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 /************************** Canonical Suite **********************************/
 
@@ -30,7 +31,10 @@ Bureaucrat::Bureaucrat(std::string name, int grade) : _name(name)
 	std::cout << "Parametized Bureaucrat created safely" << std::endl;
 }
 
-Bureaucrat::~Bureaucrat() {}
+Bureaucrat::~Bureaucrat() 
+{
+	std::cout << "Bureaucrat Destructor Called " << std::endl;
+}
 
 
 Bureaucrat::Bureaucrat(const Bureaucrat& src) : _name(src._name) 
@@ -81,6 +85,28 @@ void Bureaucrat::upGrade()
 void Bureaucrat::downGrade()
 {
 	Bureaucrat::downGrade(1);
+}
+
+void Bureaucrat::signForm(Form& form) const
+{
+	if (form.getSignStatus())
+	{
+		std::cout << this->getName() << " doesn't need to sign " << form.getName() << " : already signed " << std::endl;
+		return ;
+	}
+	try
+	{
+		form.beSigned(*this);
+		std::cout << this->getName() << " signed form : " << form.getName() << std::endl;
+	}
+	catch(Form::GradeTooHighException& h)
+	{
+		std::cerr << this->getName() << " cannot sign form : " << form.getName() << " because " << h.what() << std::endl;
+	}
+	catch(Form::GradeTooLowException& l)
+	{
+		std::cerr << this->getName() << " cannot sign form : " << form.getName() << " because " << l.what() << std::endl;
+	}
 }
 
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& src)

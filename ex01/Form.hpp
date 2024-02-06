@@ -6,7 +6,7 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:32:07 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 13:30:51 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/06 17:14:53 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define FORM_HPP
 
 # include "Bureaucrat.hpp"
+
+class Bureaucrat;
 
 class Form
 {
@@ -25,28 +27,31 @@ private:
 
 public:
 	Form();
-	Form(const std::string& name);
 	Form(const std::string& name, const int signer, const int exec);
 	~Form();
 	Form (const Form& src);
 	Form& operator=(const Form& src);
 	const std::string& getName() const;
-	const bool getSignStatus() const;
-	const int getSignGrade() const;
-	const int getExecnGrade() const;
-	void	beSigned(Bureaucrat& signer);
+	bool getSignStatus() const;
+	int getSignGrade() const;
+	int getExecGrade() const;
+	void	beSigned(const Bureaucrat& signer);
 
-	void	valid_doc();
+	void	validDoc();
 
 	class GradeTooHighException : public std::exception
 	{
-		const char* what () const throw(); 		
+		public:
+			const char* what () const throw(); 		
 	};
 	
 	class GradeTooLowException : public std::exception
 	{
-		const char* what () const throw(); 		
+		public:
+			const char* what () const throw(); 		
 	};
 };
+
+std::ostream& operator<<(std::ostream& os, const Form& src);
 
 #endif

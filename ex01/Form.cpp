@@ -6,7 +6,7 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:42:01 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 13:30:22 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/06 17:28:58 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,22 @@
 
 Form::Form() : _name("unknown_form"), _signed(false), _sign_grade(Bureaucrat::lowest_rank), _exec_grade(Bureaucrat::lowest_rank) {}
 
-Form::Form(const std::string& name, const int signatory, const int exec) : _name(name), _signed(false), _sign_grade(signer), _exec_grade(exec) 
+Form::Form(const std::string& name, const int signatory, const int exec) : _name(name), _signed(false), _sign_grade(signatory), _exec_grade(exec) 
 {
-	this->valid_doc();
+	if (_sign_grade < Bureaucrat::top_rank || _exec_grade < Bureaucrat::top_rank)
+		throw Form::GradeTooHighException();
+	if (_sign_grade > Bureaucrat::lowest_rank || _exec_grade > Bureaucrat::lowest_rank)
+		throw Form::GradeTooLowException();
 }
 
-Form::~Form() {}
+Form::~Form() 
+{
+	std::cout << "Form Destructor Called " << std::endl;
+}
 
 Form::Form (const Form& src) : _name(src._name), _signed(false), _sign_grade(src._sign_grade), _exec_grade(src._exec_grade) 
 {
-	this->valid_doc();
+	this->validDoc();
 }
 
 Form& Form::operator=(const Form& src) 
@@ -38,41 +44,56 @@ const std::string& Form::getName() const
 	return (this->_name);
 }
 
-const bool Form::getSignStatus() const
+bool Form::getSignStatus() const
 {
 	return (this->_signed);
 }
 
-const int Form::getSignGrade() const
+int Form::getSignGrade() const
 {
 	return (this->_sign_grade);
 }
 
-const int Form::getExecnGrade() const
+int Form::getExecGrade() const
 {
 	return (this->_exec_grade);
 }
 
-//void	Form::beSigned(Bureaucrat& signer) - TO IMPLEMENT
+void	Form::beSigned(const Bureaucrat& signatory)
+{
+	if (signatory.getGrade() > this->_sign_grade)
+		throw Form::GradeTooLowException();
+	this->_signed = true;
+}
 
-void	Form::valid_doc()
+void	Form::validDoc()
 {
 	if (this->_sign_grade < Bureaucrat::top_rank)
-		throw Bureaucrat::GradeTooHighException();
+		throw Form::GradeTooHighException();
 	if (this->_sign_grade > Bureaucrat::lowest_rank)
-		throw Bureaucrat::GradeTooLowException();
+		throw Form::GradeTooLowException();
 	if (this->_exec_grade < Bureaucrat::top_rank)
-		throw Bureaucrat::GradeTooHighException();
+		throw Form::GradeTooHighException();
 	if (this->_exec_grade > Bureaucrat::lowest_rank)
-		throw Bureaucrat::GradeTooLowException();
+		throw Form::GradeTooLowException();
 }
 
 const char* Form::GradeTooHighException::what() const throw()
 {
-		return (RED "Signatory too high level to sign" RESET);
+	return (RED "Signatory too high level to sign" RESET);
 }
 	
 const char* Form::GradeTooLowException::what() const throw()
 {
 	return (RED "Bureaucrat too low level to sign " RESET);
+}
+
+std::ostream& operator<<(std::ostream& os, const Form& src)
+{
+	os << "Form state is: " << std::endl;
+	os << "\t name: " << src.getName() << std::endl;
+	os << "\t Status: " << src.getSignStatus() << std::endl;
+	os << "\t Signatory Grade min level: " << src.getSignGrade() << std::endl;
+	os <<"\t Execution Grade min level: " << src.getExecGrade() << std::endl;
+	return (os);
 }

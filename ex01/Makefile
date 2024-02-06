@@ -6,12 +6,12 @@
 #    By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 16:51:31 by rjobert           #+#    #+#              #
-#    Updated: 2024/02/06 13:31:30 by rjobert          ###   ########.fr        #
+#    Updated: 2024/02/06 17:15:34 by rjobert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
-NAME = Bureaucracy
+NAME = Forms
 FLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -I ./
 HEADER = Bureaucrat.hpp Form.hpp colors.h
 SRC = main.cpp Bureaucrat.cpp Form.cpp

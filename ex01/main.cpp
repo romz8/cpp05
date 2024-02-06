@@ -6,11 +6,12 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:33:14 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 12:16:06 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/06 17:29:41 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 const Bureaucrat bureaucrat_factory(const std::string& name, int grade)
 {
@@ -34,47 +35,28 @@ const Bureaucrat bureaucrat_factory(const std::string& name, int grade)
 	
 }
 
-void	safe_promotion(Bureaucrat& src, bool dir)
+const Form form_factory(const std::string& name, int grade_sign, int grade_exec)
 {
 	try
 	{
-		if (dir == true)
-			src.upGrade();
-		else
-			src.downGrade();
+		Form safe(name, grade_sign, grade_exec);
+		std::cout << "Form compliant with admin life" << std::endl;
+		return (safe);
 	}
-	catch(Bureaucrat::GradeTooHighException& h)
+	catch (Form::GradeTooHighException& h)
 	{
-		std::cerr << "issue during the promotion " << h.what() << std::endl;
+		std::cerr << "issue creating the Form : " << h.what() << std::endl;
+		return (Form(name, Bureaucrat::lowest_rank, Bureaucrat::lowest_rank));
 	}
-	catch(Bureaucrat::GradeTooLowException& l)
+	catch (Form::GradeTooLowException& l)
 	{
-		std::cerr << "issue during the downgrade " << l.what() << std::endl;
+		std::cerr << "issue creating Form : " << l.what() << std::endl;
+		return (Form(name, Bureaucrat::lowest_rank, Bureaucrat::lowest_rank));
 	}
-	
+	std::cout << "Bureaucrat created safely and ready for admin life" << std::endl;
 	
 }
 
-void	safe_bulk_promotion(Bureaucrat& src, int n , bool dir)
-{
-	try
-	{
-		if (dir == true)
-			src.upGrade(n);
-		else
-			src.downGrade(n);
-	}
-	catch(Bureaucrat::GradeTooHighException& h)
-	{
-		std::cerr << "issue during the promotion : " << h.what() << std::endl;
-	}
-	catch(Bureaucrat::GradeTooLowException& l)
-	{
-		std::cerr << "issue during the downgrade : " << l.what() << std::endl;
-	}
-	
-	
-}
 
 void canonical_test()
 {
@@ -82,108 +64,114 @@ void canonical_test()
 	std::cout << std::endl << "Testing Canonical Constructor Destructor" << std::endl;
 	std::cout << std::endl << "****************************************" RESET<< std::endl;
 	std::cout << YELLOW "Canonical test : Good value" RESET<< std::endl;
-	Bureaucrat chief("boss", 1);
-	Bureaucrat boring;
-	boring = chief;
-	Bureaucrat sbire("sbire", 150);
-	Bureaucrat sbire2(sbire);
-	std::cout << BLUE "Bureaucrat dream team is: " RESET << std::endl;
-	std::cout << chief;
-	std::cout << sbire;
+	Form f1, f2;
+	Form f42("form_2", 42, 42);
+	f2 = f42;
+	Form f42_cpy(f42);
+	std::cout << BLUE "Forms created are: " RESET << std::endl;
+	std::cout << f1;
+	std::cout << f42;
 	std::cout << BLUE "their copies are : " RESET  << std::endl;
-	std::cout << boring;
-	std::cout << sbire2;
+	std::cout << f2;
+	std::cout << f42_cpy;
 
 	//bad construct test
 	std::cout << YELLOW "Bad constructor test" RESET<< std::endl;
-	std::cout << "trying for 0, 151, -10000, 100000 "<< std::endl;
 	
-	Bureaucrat toomuch = bureaucrat_factory("boss_too_ambitious", 0);
-	Bureaucrat toolow = bureaucrat_factory("too_sbire", 151);
-	Bureaucrat too_ambi = bureaucrat_factory("crazy boss", -10000);
-	Bureaucrat not_ambi = bureaucrat_factory("lazy sbire", 10000);
+	std::cout << "trying for grade sign, exec = 151, 151"<< std::endl;
+	Form toolow = form_factory("too_sbire", 151, 151);
+	std::cout << "trying for grade sign, exec = 0, 0"<< std::endl;
+	Form toomuch = form_factory("boss_too_ambitious", 0, 0);
+	std::cout << "trying for grade sign, exec = 1, 0"<< std::endl;
+	Form too_much_onlyexec =form_factory("crazy boss", 1, 0);
+	std::cout << "trying for grade sign, exec = 0, 1"<< std::endl;
+	Form too_much_only_sign =form_factory("crazy boss", 0, 1);
+	std::cout << "trying for grade sign, exec = 1, 151"<< std::endl;
+	Form too_low_onlyexec =form_factory("crazy boss", 1, 151);
+	std::cout << "trying for grade sign, exec = 151, 1"<< std::endl;
+	Form too_low_only_sign =form_factory("crazy boss", 151, 1);
 	
-	std::cout << YELLOW "Result from outsized test : should all be low rank bureaucrat" RESET<< std::endl;
+	std::cout << YELLOW "Result from outsized test : should all be Forms foor low rank bureaucrat" RESET<< std::endl;
 	std::cout << toomuch;
 	std::cout << toolow;
-	std::cout << too_ambi;
-	std::cout << not_ambi;
+	std::cout << too_much_onlyexec;
+	std::cout << too_low_onlyexec;
+	std::cout << too_much_only_sign;
+	std::cout << too_low_only_sign;
 }
 
-void promotion_test()
+void sign_test()
 {
 	std::cout << std::endl << GREEN "****************************************" << std::endl;
-	std::cout << std::endl << "Testing Promotion" << std::endl;
+	std::cout << std::endl << "Testing Signing Functions" << std::endl;
 	std::cout << std::endl << "****************************************" RESET<< std::endl;
 	
-	std::cout << std::endl << YELLOW "creating an entire administration" RESET<< std::endl;
-	Bureaucrat boss("boss", 1);
-	Bureaucrat sbire("sous-fifre", 150);
-	Bureaucrat mid("manager", 75);
-	Bureaucrat top_mid("manager of manager", 50);
-	Bureaucrat low_mid("managed by manager", 115);
-	
-	std::cout <<  YELLOW "Bureaucras are : " RESET<< std::endl;
-	std::cout << boss << std::endl << sbire << std::endl << mid << std::endl << top_mid << std::endl << low_mid << std::endl;
-
-	std::cout << YELLOW "Social Revolution" RESET<< std::endl;
-	std::cout << YELLOW "up / downgrade test : promoting / declassing 149 the tops and bottoms" RESET<< std::endl;
-	for (int i = 0; i < 149; ++i)
+	std::cout << std::endl << YELLOW "FUNCTIONAL ADMINISTRATION" RESET<< std::endl;
 	{
-		safe_promotion(sbire, true);
-		safe_promotion(boss, false);
+		std::cout << std::endl << YELLOW "creating an entire administration" RESET<< std::endl;
+		Bureaucrat boss("boss", 1);
+		Bureaucrat sbire("sous-fifre", 150);
+		Bureaucrat mid("manager", 75);
+		Bureaucrat top_mid("manager of manager", 50);
+		Bureaucrat low_mid("managed by manager", 115);
+		
+		std::cout <<  BLUE "Bureaucras are : " RESET<< std::endl;
+		std::cout << boss << std::endl << sbire << std::endl << mid << std::endl << top_mid << std::endl << low_mid << std::endl;	
+		std::cout << std::endl << YELLOW "creating some funky forms" RESET<< std::endl;
+		Form f1("top secret", 1, 1);
+		Form f2("open bar", 150, 150);
+		Form f3("f458972B - middle office nightmare", 75, 75);
+		std::cout <<  BLUE "Forms are : " RESET<< std::endl;
+		std::cout << f1;
+		std::cout << f2;
+		std::cout << f3;
+		std::cout << std::endl << YELLOW "FUNCTIONAL ADMINISTRATION" RESET<< std::endl;
+		std::cout << BLUE "the boss, sbire and manager sign their respective level files" RESET << std::endl;
+		boss.signForm(f1);
+		sbire.signForm(f2);
+		top_mid.signForm(f3);
+		std::cout << BLUE "middle management try to sign some of their level file but already signed" RESET << std::endl;
+		low_mid.signForm(f3);
+		top_mid.signForm(f2);
 	}
-	std::cout << BLUE "now we should have boss at lowest level and former lowest at the top" RESET << std::endl;
-	std::cout << boss;
-	std::cout << sbire;
-	std::cout << BLUE "one more (fatal) move" RESET << std::endl;
-	safe_promotion(sbire, true);
-	safe_promotion(boss, false);
-	std::cout << boss;
-	std::cout << sbire;
-	
-	std::cout << YELLOW "Now trying bulk promotions" RESET<< std::endl;
-	std::cout << BLUE "trying to promote manager by 50 rank" RESET << std::endl;
-	std::cout << "is rank should be : " << mid.getGrade() - 50 << std::endl;
-	safe_bulk_promotion(mid, 50, true);
-	std::cout << mid;
-	std::cout << "now trying by 100" << std::endl;
-	safe_bulk_promotion(mid, 100, true);
-	std::cout << "now trying downgrade by 1000" << std::endl;
-	safe_bulk_promotion(mid, 1000, false);
-	std::cout << "is rank should stay the same (promotion cancelled)" << std::endl;
-	std::cout << mid;
-	std::cout << BLUE "let's invert the managers, now we have :" RESET << std::endl;
-	std::cout << top_mid;
-	std::cout << low_mid;
-	safe_bulk_promotion(low_mid, 65, true);
-	safe_bulk_promotion(top_mid, 65, false);
-	std::cout << BLUE "post-promotion upside down :" RESET << std::endl;
-	std::cout << top_mid;
-	std::cout << low_mid;
-	std::cout << YELLOW "trying negative promotions / downgrade" RESET<< std::endl;
-	std::cout << BLUE "manager level is :" RESET << std::endl;
-	std::cout << mid;
-	std::cout << BLUE "promoting by -100 :" RESET << std::endl;
-	safe_bulk_promotion(mid, -100, true);
-	std::cout << mid;
-	std::cout << BLUE "promoting by -200 :" RESET << std::endl;
-	safe_bulk_promotion(mid, -200, true);
-	std::cout << mid;
-	std::cout << BLUE "downgrading by -20 :" RESET << std::endl;
-	safe_bulk_promotion(mid, -20, false);
-	std::cout << mid;
-	std::cout << BLUE "downgrading by -200 :" RESET << std::endl;
-	safe_bulk_promotion(mid, -200, false);
-	std::cout << mid;
-	
+	std::cout << std::endl << YELLOW "DISFUNCTIONAL ADMINISTRATION - HELL" RESET<< std::endl;
+	{
+		std::cout << std::endl << YELLOW "creating an entire administration" RESET<< std::endl;
+		Bureaucrat boss("boss", 1);
+		Bureaucrat sbire("sous-fifre", 150);
+		Bureaucrat mid("manager", 75);
+		Bureaucrat top_mid("manager of manager", 50);
+		Bureaucrat low_mid("managed by manager", 115);
+		
+		std::cout <<  BLUE "Bureaucras are : " RESET<< std::endl;
+		std::cout << boss << std::endl << sbire << std::endl << mid << std::endl << top_mid << std::endl << low_mid << std::endl;	
+		std::cout << std::endl << YELLOW "creating some funky forms" RESET<< std::endl;
+		Form f1("top secret", 1, 1);
+		Form f2("high level", 45, 45);
+		Form f3("f45C - low level authorization", 120, 120);
+		std::cout <<  BLUE "Forms are : " RESET<< std::endl;
+		std::cout << f1;
+		std::cout << f2;
+		std::cout << f3;
+		std::cout << std::endl << YELLOW "FUNCTIONAL ADMINISTRATION" RESET<< std::endl;
+		std::cout << BLUE "sbire and low manager sign files they could not acess" RESET << std::endl;
+		sbire.signForm(f1);
+		low_mid.signForm(f2);
+		top_mid.signForm(f2);
+		std::cout << BLUE "finally boss and top manager step in" RESET << std::endl;
+		boss.signForm(f1);
+		boss.signForm(f2);
+		top_mid.signForm(f3);
+		std::cout << BLUE "low management undestand what to sign but too late - they will be micro managed now" RESET << std::endl;
+		low_mid.signForm(f3);
+	}
 }
 
 int main(void)
 {
 
 	canonical_test();
-	promotion_test();
+	sign_test();
 
 	return (0);
 }
