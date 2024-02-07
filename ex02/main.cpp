@@ -6,13 +6,15 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:33:14 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 21:55:44 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/07 16:33:52 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 #include "ShrubberyCreationForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "PresidentialPardonForm.hpp"
 
 void safe_form_exec(AForm& f, Bureaucrat &executor)
 {
@@ -94,8 +96,58 @@ void Shrubbery_test()
 	return ;
 }
 
+
+void	bureaucrat_exec_test()
+{
+	std::cout << std::endl << GREEN "****************************************" << std::endl;
+	std::cout << std::endl << "Testing Bureaucrat exec form method " << std::endl;
+	std::cout << std::endl << "****************************************" RESET<< std::endl;
+	
+	std::cout << std::endl << YELLOW "creating an entire administration" RESET<< std::endl;
+	Bureaucrat boss("boss", 1);
+	Bureaucrat sbire("sous-fifre", 150);
+	Bureaucrat mid("manager", 75);
+	Bureaucrat top_mid("manager of manager", 50);
+	Bureaucrat low_mid("managed by manager", 145);
+	std::cout <<  BLUE "Bureaucras are : " RESET<< std::endl;
+	std::cout << boss << std::endl << sbire << std::endl << mid << std::endl;
+	std::cout << top_mid << std::endl << low_mid << std::endl;
+
+	
+	std::cout << std::endl << YELLOW "Testing on Shrubbery" RESET<< std::endl;
+	ShrubberyCreationForm f1("home");
+	RobotomyRequestForm f2("Joker");
+	PresidentialPardonForm f3("Aaron");
+
+	std::cout << std::endl << BLUE "Boss tries (but not signed)" RESET<< std::endl;
+	boss.executeForm(f1);
+	boss.executeForm(f2);
+	boss.executeForm(f3);
+	std::cout << std::endl << BLUE "Sbire tries to sign (but level too low)" RESET<< std::endl;
+	safe_sign_form(f1, sbire);
+	safe_sign_form(f2, sbire);
+	safe_sign_form(f3, sbire);
+	std::cout << std::endl << BLUE "manager sign but cannot execute (level to sign but too low to exec)" RESET<< std::endl;
+	safe_sign_form(f1, mid);
+	safe_sign_form(f2, top_mid);
+	std::cout << std::endl << BLUE "manager cannot sign nor exec the presidential pardon : only big boss" RESET<< std::endl;
+	safe_sign_form(f3, top_mid);
+	low_mid.executeForm(f1);
+	std::cout << std::endl << BLUE "let's now execute with higher manager and boss as well" RESET<< std::endl;
+	mid.executeForm(f1);
+	boss.executeForm(f1);
+	mid.executeForm(f2);
+	boss.executeForm(f2);
+	std::cout << std::endl << BLUE "Now boss will sign then execute the presidential pardon" RESET<< std::endl;
+	safe_sign_form(f3, boss);
+	boss.executeForm(f3);
+
+	std::cout << std::endl << GREEN "Test Passed - Cleaning Ressources" RESET<< std::endl << std::endl;
+}
+
 int main(void)
 {
 	Shrubbery_test();
+	bureaucrat_exec_test();
 	return (0);
 }

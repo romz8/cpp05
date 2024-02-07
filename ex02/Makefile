@@ -6,15 +6,15 @@
 #    By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 16:51:31 by rjobert           #+#    #+#              #
-#    Updated: 2024/02/06 21:35:33 by rjobert          ###   ########.fr        #
+#    Updated: 2024/02/07 14:57:01 by rjobert          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = c++
 NAME = Forms_madness
 FLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -I ./
-HEADER = Bureaucrat.hpp AForm.hpp colors.h ShrubberyCreationForm.hpp
-SRC = main.cpp Bureaucrat.cpp AForm.cpp ShrubberyCreationForm.cpp
+HEADER = Bureaucrat.hpp AForm.hpp colors.h ShrubberyCreationForm.hpp RobotomyRequestForm.hpp PresidentialPardonForm.hpp
+SRC = main.cpp Bureaucrat.cpp AForm.cpp ShrubberyCreationForm.cpp RobotomyRequestForm.cpp PresidentialPardonForm.cpp
 RM = rm -rf
 OBJS = $(SRC:.cpp=.o)
 DEPS = $(SRC:.cpp=.d)

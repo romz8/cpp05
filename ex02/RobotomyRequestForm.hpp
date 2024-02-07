@@ -1,43 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ShrubberyCreationForm.hpp                          :+:      :+:    :+:   */
+/*   RobotomyRequestForm.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/06 18:57:59 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/07 14:38:53 by rjobert          ###   ########.fr       */
+/*   Created: 2024/02/07 14:36:25 by rjobert           #+#    #+#             */
+/*   Updated: 2024/02/07 14:57:25 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHRUBBERYCREATIONFORM_HPP
-# define SHRUBBERYCREATIONFORM_HPP
+#ifndef ROBOTOMYREQUESTFORM_HPP
+# define ROBOTOMYREQUESTFORM_HPP
 
 #include "AForm.hpp"
-#include <fstream>
 
-class ShrubberyCreationForm : public AForm
+
+class RobotomyRequestForm : public AForm
 {
 private:
 	std::string _target;
 public:
-	ShrubberyCreationForm();
-	ShrubberyCreationForm(const std::string& target);
-	~ShrubberyCreationForm();
-	ShrubberyCreationForm(const ShrubberyCreationForm& src);
-	ShrubberyCreationForm& operator=(const ShrubberyCreationForm& src);
+	RobotomyRequestForm();
+	RobotomyRequestForm(const std::string& target);
+	~RobotomyRequestForm();
+	RobotomyRequestForm(const RobotomyRequestForm& src);
+	RobotomyRequestForm& operator=(const RobotomyRequestForm& src);
 	
 	const std::string& getTarget() const;
 	void execute(Bureaucrat const & executor) const;
-
-	class FileIssue: public std::logic_error
-	{
-		public:
-			FileIssue(const std::string& msg);
-	};
 };
 
-void tree_art(std::ofstream& os);
-std::ostream& operator<<(std::ostream& os, ShrubberyCreationForm& src);
+std::ostream& operator<<(std::ostream& os, RobotomyRequestForm& src);
 
 #endif

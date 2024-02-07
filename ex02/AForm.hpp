@@ -6,7 +6,7 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:32:07 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 20:37:07 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/07 16:31:03 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ public:
 	bool	CheckExec(const Bureaucrat& executor) const;
 	
 	virtual void execute(Bureaucrat const & executor) const = 0;
+	virtual const std::string& getTarget() const = 0;
 
 	class GradeTooHighException : public std::exception
 	{

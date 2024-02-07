@@ -6,7 +6,7 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:56:42 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 21:34:32 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/07 15:06:14 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ public:
 	void downGrade();
 	
 	void signForm(AForm& form) const;
+	void executeForm(AForm const & form) const;
 	
 	class GradeTooHighException : public std::exception 
 	{

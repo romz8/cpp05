@@ -6,7 +6,7 @@
 /*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:54:13 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 21:33:36 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/07 16:30:07 by rjobert          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ Bureaucrat::~Bureaucrat()
 {
 	std::cout << "Bureaucrat Destructor Called " << std::endl;
 }
-
 
 Bureaucrat::Bureaucrat(const Bureaucrat& src) : _name(src._name) 
 {
@@ -87,6 +86,8 @@ void Bureaucrat::downGrade()
 	Bureaucrat::downGrade(1);
 }
 
+/******************* Interfaces Functions *********************************/
+
 void Bureaucrat::signForm(AForm& AForm) const
 {
 	if (AForm.getSignStatus())
@@ -109,11 +110,29 @@ void Bureaucrat::signForm(AForm& AForm) const
 	}
 }
 
+void Bureaucrat::executeForm(AForm const & form) const
+{
+	try
+	{
+		form.execute(*this);
+		std::cout << this->getName() << " executed " << form.getName() << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		std::cerr << RED << this->getName() << " Could not execute the Form : " ;
+		std::cerr << form.getName() << " on target " << form.getTarget() << RESET << std::endl;
+	}
+}
+
 std::ostream& operator<<(std::ostream& os, const Bureaucrat& src)
 {
 	os << src.getName() << ", bureaucrat grade " << src.getGrade() << std::endl;
 	return (os);
 }
+
+
+/**************** Execption Class Message *********************************/
 
 const char* Bureaucrat::GradeTooLowException::what() const throw()
 {
