@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: romainjobert <romainjobert@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:33:14 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/07 16:33:52 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/08 13:02:35 by romainjober      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "ShrubberyCreationForm.hpp"
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
+#include "Intern.hpp"
 
 void safe_form_exec(AForm& f, Bureaucrat &executor)
 {
@@ -145,9 +146,40 @@ void	bureaucrat_exec_test()
 	std::cout << std::endl << GREEN "Test Passed - Cleaning Ressources" RESET<< std::endl << std::endl;
 }
 
+void	Intern_test()
+{
+	std::cout << std::endl << GREEN "****************************************" << std::endl;
+	std::cout << std::endl << "Testing Inters " << std::endl;
+	std::cout << std::endl << "****************************************" RESET<< std::endl;
+	
+	std::cout << std::endl << YELLOW "new administration : one intern and a boss" RESET<< std::endl;
+	Intern	intern;
+	Bureaucrat	boss("big boss",1);
+	std::cout << std::endl << BLUE "let's try : shrubbery creation, robotomy request, presidential pardon and a crazy form" RESET<< std::endl;
+	const std::string test [] = {"shrubbery creation", "robotomy request", "presidential pardon", "crazy form"};
+
+	for (int i = 0; i < 4; ++i)
+	{
+		std::cout << std::endl << BLUE "Test " << i << " On : " << test[i] << RESET<< std::endl;
+		AForm* newform = intern.makeForm(test[i], "intern_target");
+		if (newform)
+		{
+			boss.executeForm(*newform);
+			boss.signForm(*newform);
+			boss.executeForm(*newform);
+			delete newform;
+		}
+	}
+
+	std::cout << std::endl << GREEN "Test Passed - Cleaning Ressources" RESET<< std::endl << std::endl;
+}
+
+
+
 int main(void)
 {
 	Shrubbery_test();
 	bureaucrat_exec_test();
+	Intern_test();
 	return (0);
 }
