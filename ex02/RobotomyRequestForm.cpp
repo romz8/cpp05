@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RobotomyRequestForm.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: romainjobert <romainjobert@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 14:42:40 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/07 17:24:48 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/08 15:37:26 by romainjober      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void RobotomyRequestForm::execute(Bureaucrat const & executor) const
 {
 	CheckExec(executor);
 	std::cout << "Grrr.. Grrr.. making some wild and heavy Robotomy noise ..Grr .. Grr.. " << std::endl;
-	std::srand(std::time(NULL));
+	srand(time(NULL));
 	int sed = rand();
 	if (sed % 2)
 		std::cout << this->getTarget() <<" has been Robotmized Succesfully" << std::endl;

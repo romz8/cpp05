@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   RobotomyRequestForm.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: romainjobert <romainjobert@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 14:36:25 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/07 14:57:25 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/08 15:39:06 by romainjober      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ROBOTOMYREQUESTFORM_HPP
 # define ROBOTOMYREQUESTFORM_HPP
 
-#include "AForm.hpp"
+# include "AForm.hpp"
+# include <cstdlib> // For srand and rand
+# include <ctime> 
 
 
 class RobotomyRequestForm : public AForm

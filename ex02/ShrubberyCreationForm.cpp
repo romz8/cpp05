@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ShrubberyCreationForm.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjobert <rjobert@student.42.fr>            +#+  +:+       +#+        */
+/*   By: romainjobert <romainjobert@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 18:49:16 by rjobert           #+#    #+#             */
-/*   Updated: 2024/02/06 21:35:10 by rjobert          ###   ########.fr       */
+/*   Updated: 2024/02/08 15:35:49 by romainjober      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void ShrubberyCreationForm::execute(Bureaucrat const & executor) const
 	std::string file_name = this->_target;
 	file_name.append("_shrubbery");
 	
-	std::ofstream file(file_name);
+	std::ofstream file(file_name.c_str());
 	if (!file.is_open())
 		throw ShrubberyCreationForm::FileIssue("cannot create the target file");
 	tree_art(file);
